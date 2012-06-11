@@ -142,16 +142,16 @@ class Timesheet:
 
 def print_worked_day(clockin, lunch_break, lunch_break_duration, clockout):
     back_from_lunch = lunch_break + lunch_break_duration
-    print("\t|%s\t%s\t%s\t%s" % (clockin.strftime("%I:%M:%S %p"),
+    print("%s\t%s\t%s\t%s" % (clockin.strftime("%I:%M:%S %p"),
                                 lunch_break.strftime("%I:%M:%S %p"),
                                 back_from_lunch.strftime("%I:%M:%S %p"),
                                 clockout.strftime("%I:%M:%S %p")))
 
 def print_holiday():
-    print("x\t|\t\t\t\t")
+    print("x\t\t\t")
 
 def print_weekend_day():
-    print("\t|\t\t\t\t")
+    print("\t\t\t")
 
 def trunc_to_interval(num, min_, max_):
     if num < min_:
@@ -267,10 +267,9 @@ def main():
             print_worked_day(clockin, lunch, lunch_dur, clockout)
         day += timedelta(days=1)
 
-    print ("\nUse CTRL modifier to select first or second part to copy to " +
-            "spreadsheet.\n\nYou cannot paste the whole output to spreedsheet "+
-            "because there is a protected column between holiday and " +
-            "timesheet columns")
+    print ("\nPaste this output on the spreadsheet. The rows marked with\n" +
+            "'x' reference to holidays. You must mark the actual holiday\n" +
+            "column manually.")
 
 if __name__ == "__main__":
     main()
