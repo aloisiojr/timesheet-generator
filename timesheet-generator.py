@@ -227,7 +227,7 @@ def main():
     totaldays = int(args.totaldays)
 
     holiday_list = []
-    if args.holiday_list:        
+    if args.holiday_list:
         for holiday in args.holiday_list.split(','):
             holiday_list.append(datetime.strptime(holiday, "%d/%m/%y"))
 
@@ -255,7 +255,7 @@ def main():
                             later_clockin)
 
     timesheet.generate(calendar.worked_days(), balance)
-    
+
     day = firstday
     for i in range(totaldays):
         if calendar.is_holiday(day):
