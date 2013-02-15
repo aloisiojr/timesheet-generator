@@ -140,12 +140,12 @@ class Timesheet:
     def pop(self):
         return tuple(self._table.pop())
 
-def print_worked_day(clockin, lunch_break, lunch_break_duration, clockout):
+def print_worked_day(clockin, lunch_break, lunch_break_duration, clockout, ftime="%I:%M:%S %p"):
     back_from_lunch = lunch_break + lunch_break_duration
-    print("%s\t%s\t%s\t%s" % (clockin.strftime("%I:%M:%S %p"),
-                                lunch_break.strftime("%I:%M:%S %p"),
-                                back_from_lunch.strftime("%I:%M:%S %p"),
-                                clockout.strftime("%I:%M:%S %p")))
+    print("%s\t%s\t%s\t%s" % (clockin.strftime(ftime),
+                                lunch_break.strftime(ftime),
+                                back_from_lunch.strftime(ftime),
+                                clockout.strftime(ftime)))
 
 def print_holiday():
     print("x\t\t\t")
