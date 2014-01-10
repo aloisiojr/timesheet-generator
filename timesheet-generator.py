@@ -77,13 +77,11 @@ class Calendar:
 
 
 MAX_CLOCK_OUT_TIME = TimeOfDay(hour=22)
-MIN_WORKING_TIME_PER_DAY = timedelta(hours=6, minutes=48)
 MAX_WORKING_TIME_PER_DAY = timedelta(hours=10, minutes=48)
 DAILY_WORKTIME= timedelta(hours=8, minutes=48)
 
 class Timesheet:
     _max_clockout = MAX_CLOCK_OUT_TIME
-    _min_working_time = MIN_WORKING_TIME_PER_DAY
     _max_working_time = MAX_WORKING_TIME_PER_DAY
     _daily_worktime = DAILY_WORKTIME
     _table = []
@@ -114,21 +112,39 @@ class Timesheet:
         remaining_min = (worked_time.total_seconds() / 60) % worked_days
         average_worked = ((worked_time - timedelta(minutes=remaining_min)) /
                             worked_days)
+        # Warn the user that it's impossible to prevent exceed the max
+        # working time
+        overloaded = False
+        if (worked_time / worked_days) > self._max_working_time:
+            overloaded = True
+            print("WARNING: Your average working time is higher than the \n" +
+                  "         max allowed working time. Check the spreadsheet!\n")
+
+        # The average_worked = (min_working_time + self._max_working_time) / 2
+        # in order to calculate the second day worked time without exceed the
+        # max_working_time.
+        min_working_time = (self._max_working_time -
+                            ((self._max_working_time - average_worked) * 2))
+
+        # You should not work that much...
+        if min_working_time > self._max_working_time:
+            x = min_working_time
+            min_working_time = self._max_working_time
+            self._max_working_time = x
 
         # Generate 2 days per iteraction
         for i in range(worked_days / 2):
             # The first day has a random working time
-            worked_day1 = random_time(self._min_working_time,
-                                        self._max_working_time)
+            worked_day1 = random_time(min_working_time, self._max_working_time)
             # The following day has the complement to keep the average
             worked_day2 = (2 * average_worked) - worked_day1
 
-            if remaining_min:
+            if remaining_min and (overloaded or worked_day1 < self._max_working_time):
                 worked_day1 += timedelta(minutes=1)
                 remaining_min -= 1
             self._table.append(self._generate_day(worked_day1))
 
-            if remaining_min:
+            if remaining_min and (overloaded or worked_day2 < self._max_working_time):
                 worked_day2 += timedelta(minutes=1)
                 remaining_min -= 1
             self._table.append(self._generate_day(worked_day2))
