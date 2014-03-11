@@ -133,7 +133,7 @@ class Timesheet:
             self._max_working_time = x
 
         # Generate 2 days per iteraction
-        for i in range(worked_days / 2):
+        for i in range((int)(worked_days / 2)):
             # The first day has a random working time
             worked_day1 = random_time(min_working_time, self._max_working_time)
             # The following day has the complement to keep the average
